@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Geopolis Consultores — Consultoría geoespacial, estudios ambientales y plataformas SIG en Chile.">
+    <title>Geopolis Consultores | Geografía · Territorio · Tecnología</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --bg:#050d1a;--bg2:#080f1e;--bg3:#0d1a30;
+            --cyan:#56bf56;--cyan-dim:rgba(86,191,86,0.12);--cyan-glow:rgba(86,191,86,0.35);
+            --purple:#7c3aed;--purple-dim:rgba(124,58,237,0.12);
+            --green:#00f593;--green-dim:rgba(0,245,147,0.12);
+            --text:#e8f0ff;--muted:#7a8fad;
+            --border:rgba(86,191,86,0.12);--r:12px
+        }
+        html{scroll-behavior:smooth}
+        body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;line-height:1.6}
+        ::-webkit-scrollbar{width:5px}
+        ::-webkit-scrollbar-track{background:var(--bg)}
+        ::-webkit-scrollbar-thumb{background:var(--cyan);border-radius:3px}
+
+        /* ── NAV ── */
+        nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:1.4rem 2.5rem;display:flex;align-items:center;justify-content:space-between;transition:all .4s}
+        nav.scrolled{background:rgba(5,13,26,.94);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:.9rem 2.5rem}
+        .nav-logo{display:flex;align-items:center;gap:.75rem;text-decoration:none}
+        .logo-text{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;color:var(--text);letter-spacing:-.02em}
+        .logo-text span{color:var(--cyan)}
+        .nav-links{display:flex;gap:2.5rem;list-style:none;align-items:center}
+        .nav-links a{color:var(--muted);text-decoration:none;font-size:.88rem;font-weight:500;transition:color .3s;position:relative}
+        .nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1px;background:var(--cyan);transition:width .3s}
+        .nav-links a:hover{color:var(--cyan)}
+        .nav-links a:hover::after{width:100%}
+        .nav-cta{background:linear-gradient(135deg,var(--cyan),#2e9a2e) !important;color:#050d1a !important;padding:.48rem 1.2rem;border-radius:7px;font-weight:600 !important}
+        .nav-cta::after{display:none !important}
+        .nav-cta:hover{box-shadow:0 4px 22px var(--cyan-glow);transform:translateY(-1px)}
+        .nav-toggle{display:none;background:none;border:none;color:var(--text);font-size:1.4rem;cursor:pointer}
+
+        /* ── HERO ── */
+        #hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden}
+        #heroCanvas{position:absolute;inset:0;z-index:0}
+        .hero-radial{position:absolute;inset:0;background:
+            radial-gradient(ellipse at 18% 55%,rgba(86,191,86,.07) 0%,transparent 55%),
+            radial-gradient(ellipse at 80% 20%,rgba(124,58,237,.07) 0%,transparent 50%),
+            radial-gradient(ellipse at 60% 85%,rgba(0,245,147,.04) 0%,transparent 40%);
+            z-index:1}
+        .hero-content{position:relative;z-index:2;max-width:1200px;margin:0 auto;padding:0 2.5rem;padding-top:7rem;padding-bottom:5rem}
+        .hero-badge{display:inline-flex;align-items:center;gap:.55rem;background:rgba(86,191,86,.08);border:1px solid rgba(86,191,86,.25);border-radius:50px;padding:.38rem 1rem;font-size:.76rem;color:var(--cyan);font-family:'JetBrains Mono',monospace;letter-spacing:.05em;margin-bottom:2rem;animation:fadeUp .8s ease both}
+        .badge-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulseDot 2s infinite}
+        @keyframes pulseDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.6)}}
+        .hero-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(2.8rem,6.5vw,5.5rem);font-weight:700;line-height:1.06;letter-spacing:-.03em;margin-bottom:1.6rem;animation:fadeUp .8s .18s ease both}
+        .hero-title .gradient{background:linear-gradient(135deg,var(--cyan) 0%,#7c3aed 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .hero-sub{font-size:1.1rem;color:var(--muted);max-width:560px;margin-bottom:2.8rem;line-height:1.75;animation:fadeUp .8s .35s ease both}
+        .hero-ctas{display:flex;gap:1rem;flex-wrap:wrap;animation:fadeUp .8s .5s ease both}
+        .btn-fill{display:inline-flex;align-items:center;gap:.6rem;background:linear-gradient(135deg,var(--cyan),#2e9a2e);color:#050d1a;padding:.88rem 1.9rem;border-radius:8px;text-decoration:none;font-weight:700;font-size:.92rem;transition:all .3s}
+        .btn-fill:hover{transform:translateY(-2px);box-shadow:0 10px 35px rgba(86,191,86,.38)}
+        .btn-ghost{display:inline-flex;align-items:center;gap:.6rem;background:transparent;color:var(--text);padding:.88rem 1.9rem;border-radius:8px;text-decoration:none;font-weight:500;font-size:.92rem;border:1px solid var(--border);transition:all .3s}
+        .btn-ghost:hover{border-color:rgba(86,191,86,.4);color:var(--cyan);background:rgba(86,191,86,.05)}
+        .hero-bottom{display:flex;gap:3.5rem;margin-top:5rem;animation:fadeUp .8s .7s ease both}
+        .h-stat-num{font-family:'Space Grotesk',sans-serif;font-size:2rem;font-weight:700;color:var(--cyan)}
+        .h-stat-lbl{font-size:.78rem;color:var(--muted);letter-spacing:.04em}
+        .scroll-hint{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:.4rem;animation:fadeUp 1s 1.2s ease both;opacity:0}
+        .scroll-hint.show{opacity:1}
+        .scroll-line{width:1px;height:48px;background:linear-gradient(to bottom,var(--cyan),transparent);animation:scrollAnim 2s infinite}
+        @keyframes scrollAnim{0%{opacity:0;transform:scaleY(0);transform-origin:top}50%{opacity:1;transform:scaleY(1)}100%{opacity:0;transform:scaleY(1);transform-origin:bottom}}
+
+        /* ── SHARED ── */
+        section{padding:7rem 2.5rem}
+        .container{max-width:1200px;margin:0 auto}
+        .stag{font-family:'JetBrains Mono',monospace;font-size:.73rem;color:var(--cyan);letter-spacing:.15em;text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:.75rem}
+        .stag::before{content:'';display:inline-block;width:28px;height:1px;background:var(--cyan)}
+        .stitle{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.9rem,3.8vw,2.9rem);font-weight:700;line-height:1.12;letter-spacing:-.025em;margin-bottom:1.4rem}
+        .stitle em{font-style:normal;color:var(--cyan)}
+        .sdesc{color:var(--muted);line-height:1.8;font-size:1rem}
+
+        @keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+        .reveal{opacity:0;transform:translateY(28px);transition:opacity .65s ease,transform .65s ease}
+        .reveal.visible{opacity:1;transform:translateY(0)}
+        .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
+        .d4{transition-delay:.4s}.d5{transition-delay:.5s}.d6{transition-delay:.6s}
+
+        /* ── NOSOTROS ── */
+        #nosotros{background:var(--bg2);position:relative;overflow:hidden}
+        #nosotros::after{content:'GEOPOLIS';position:absolute;right:-3rem;top:50%;transform:translateY(-50%);font-family:'Space Grotesk',sans-serif;font-size:13rem;font-weight:800;color:rgba(255,255,255,.018);user-select:none;white-space:nowrap;pointer-events:none}
+        .nos-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
+        .nos-feats{display:flex;flex-direction:column;gap:1rem;margin-top:2rem}
+        .nos-feat{display:flex;align-items:flex-start;gap:1rem;padding:1rem 1.1rem;background:var(--bg3);border-radius:var(--r);border:1px solid var(--border);transition:border-color .3s}
+        .nos-feat:hover{border-color:rgba(86,191,86,.3)}
+        .feat-ico{width:40px;height:40px;border-radius:8px;background:var(--cyan-dim);display:flex;align-items:center;justify-content:center;color:var(--cyan);flex-shrink:0;font-size:.9rem}
+        .feat-txt h4{font-family:'Space Grotesk',sans-serif;font-size:.88rem;font-weight:600;margin-bottom:.2rem}
+        .feat-txt p{font-size:.8rem;color:var(--muted)}
+        .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem}
+        .stat-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:2rem;text-align:center;position:relative;overflow:hidden;transition:transform .3s,border-color .3s}
+        .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--purple))}
+        .stat-card:hover{transform:translateY(-4px);border-color:rgba(86,191,86,.28)}
+        .stat-num{font-family:'Space Grotesk',sans-serif;font-size:2.8rem;font-weight:700;color:var(--cyan);line-height:1}
+        .stat-lbl{font-size:.78rem;color:var(--muted);margin-top:.5rem;line-height:1.4}
+
+        /* ── SERVICIOS ── */
+        #servicios{background:var(--bg)}
+        .srv-hdr{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-bottom:4rem;align-items:end}
+        .srv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem}
+        .srv-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:2rem;position:relative;overflow:hidden;transition:all .4s cubic-bezier(.25,.8,.25,1);cursor:default}
+        .srv-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .4s}
+        .srv-card.c-cyan::before{background:linear-gradient(135deg,var(--cyan-dim),transparent)}
+        .srv-card.c-purple::before{background:linear-gradient(135deg,var(--purple-dim),transparent)}
+        .srv-card.c-green::before{background:linear-gradient(135deg,var(--green-dim),transparent)}
+        .srv-card:hover{transform:translateY(-6px);box-shadow:0 22px 60px rgba(0,0,0,.25)}
+        .srv-card.c-cyan:hover{border-color:rgba(86,191,86,.35)}
+        .srv-card.c-purple:hover{border-color:rgba(124,58,237,.35)}
+        .srv-card.c-green:hover{border-color:rgba(0,245,147,.35)}
+        .srv-card:hover::before{opacity:1}
+        .srv-ico{width:50px;height:50px;border-radius:11px;display:flex;align-items:center;justify-content:center;margin-bottom:1.4rem;font-size:1.2rem;position:relative;z-index:1}
+        .srv-ico.cyan{background:var(--cyan-dim);color:var(--cyan)}
+        .srv-ico.purple{background:var(--purple-dim);color:var(--purple)}
+        .srv-ico.green{background:var(--green-dim);color:var(--green)}
+        .srv-card h3{font-family:'Space Grotesk',sans-serif;font-size:1.02rem;font-weight:600;margin-bottom:.75rem;position:relative;z-index:1}
+        .srv-card p{font-size:.84rem;color:var(--muted);line-height:1.72;position:relative;z-index:1}
+        .tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:1.1rem;position:relative;z-index:1}
+        .tag{font-size:.7rem;padding:.18rem .55rem;border-radius:50px;border:1px solid var(--border);color:var(--muted);font-family:'JetBrains Mono',monospace}
+        .law-ref{font-family:'JetBrains Mono',monospace;font-size:.67rem;letter-spacing:.03em;margin-bottom:.6rem;display:inline-block;padding:.22rem .6rem;border-radius:5px;position:relative;z-index:1;font-weight:500}
+        .law-ref.cyan{color:var(--cyan);background:var(--cyan-dim)}
+        .law-ref.green{color:var(--green);background:var(--green-dim)}
+        .law-ref.purple{color:var(--purple);background:var(--purple-dim)}
+        .law-ref.orange{color:#ff8c42;background:rgba(255,140,66,.12)}
+        .law-ref.red{color:#ff4d6a;background:rgba(255,77,106,.12)}
+        .c-orange::before{background:linear-gradient(135deg,rgba(255,140,66,.12),transparent)}
+        .c-orange:hover{border-color:rgba(255,140,66,.38);box-shadow:0 22px 60px rgba(255,140,66,.1)}
+        .c-red::before{background:linear-gradient(135deg,rgba(255,77,106,.12),transparent)}
+        .c-red:hover{border-color:rgba(255,77,106,.38);box-shadow:0 22px 60px rgba(255,77,106,.1)}
+        .srv-ico.orange{background:rgba(255,140,66,.12);color:#ff8c42}
+        .srv-ico.red{background:rgba(255,77,106,.12);color:#ff4d6a}
+
+        /* ── PLATAFORMA ── */
+        #plataforma{background:var(--bg2);overflow:hidden}
+        .plat-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
+        .plat-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(0,245,147,.1);border:1px solid rgba(0,245,147,.3);border-radius:50px;padding:.35rem .9rem;font-size:.75rem;color:var(--green);margin-bottom:1.4rem;font-family:'JetBrains Mono',monospace}
+        .plat-feats{display:flex;flex-direction:column;gap:.9rem;margin-top:2.2rem}
+        .plat-feat{display:flex;align-items:center;gap:.9rem;font-size:.88rem;color:var(--muted)}
+        .plat-feat .ok{color:var(--green)}
+        .plat-feat .soon{color:var(--muted)}
+        .mockup-win{background:#070e1c;border:1px solid rgba(86,191,86,.18);border-radius:14px;overflow:hidden;box-shadow:0 40px 100px rgba(0,0,0,.5)}
+        .mockup-bar{background:var(--bg3);padding:.75rem 1rem;display:flex;align-items:center;gap:.45rem;border-bottom:1px solid var(--border)}
+        .m-dot{width:10px;height:10px;border-radius:50%}
+        .m-dot.r{background:#ff5f57}.m-dot.y{background:#febc2e}.m-dot.g{background:#28c840}
+        .m-url{flex:1;background:rgba(255,255,255,.05);border-radius:4px;padding:.22rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--muted);margin-left:.5rem}
+        .mockup-body{position:relative;height:290px;overflow:hidden}
+        #mockupCanvas{width:100%;height:100%}
+        .mockup-over{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(5,13,26,.6);backdrop-filter:blur(4px)}
+        .cs-box{text-align:center}
+        .cs-icon{font-size:2.4rem;margin-bottom:.9rem;animation:float 3s ease-in-out infinite;display:block}
+        @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+        .cs-box h3{font-family:'Space Grotesk',sans-serif;font-size:1.2rem;color:var(--green);margin-bottom:.35rem}
+        .cs-box p{font-size:.82rem;color:var(--muted)}
+
+        /* ── EQUIPO ── */
+        #equipo{background:var(--bg)}
+        .team-hdr{text-align:center;margin-bottom:4rem}
+        .team-hdr .stag{justify-content:center}
+        .team-hdr .sdesc{margin:0 auto;max-width:550px}
+        .team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
+        .team-card{background:var(--bg3);border:1px solid var(--border);border-radius:16px;padding:2.5rem 2rem;text-align:center;transition:all .4s;position:relative;overflow:hidden}
+        .team-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--cyan),var(--purple));transform:scaleX(0);transition:transform .4s}
+        .team-card:hover{transform:translateY(-8px);border-color:rgba(86,191,86,.22);box-shadow:0 30px 80px rgba(0,0,0,.3)}
+        .team-card:hover::after{transform:scaleX(1)}
+        .avatar{width:88px;height:88px;border-radius:50%;margin:0 auto 1.4rem;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:1.7rem;font-weight:700;position:relative}
+        .avatar::before{content:'';position:absolute;inset:-3px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--purple));z-index:-1}
+        .av-j{background:#071830;color:var(--cyan)}
+        .av-m{background:#120a30;color:var(--purple)}
+        .av-c{background:#071e14;color:var(--green)}
+        .team-card h3{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;margin-bottom:.28rem}
+        .team-role{font-size:.8rem;color:var(--cyan);font-weight:500;margin-bottom:.9rem;letter-spacing:.02em}
+        .team-desc{font-size:.83rem;color:var(--muted);line-height:1.72}
+        .t-links{display:flex;justify-content:center;gap:.7rem;margin-top:1.4rem}
+        .t-link{width:33px;height:33px;border-radius:8px;background:rgba(255,255,255,.04);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);text-decoration:none;font-size:.8rem;transition:all .3s}
+        .t-link:hover{background:var(--cyan-dim);border-color:rgba(86,191,86,.4);color:var(--cyan)}
+
+        /* ── CONTACTO ── */
+        #contacto{background:var(--bg2)}
+        .contact-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:5rem;align-items:start}
+        .c-info{display:flex;flex-direction:column;gap:1.4rem;margin-top:2rem}
+        .c-item{display:flex;align-items:flex-start;gap:1rem}
+        .c-ico{width:42px;height:42px;border-radius:10px;background:var(--cyan-dim);border:1px solid rgba(86,191,86,.2);display:flex;align-items:center;justify-content:center;color:var(--cyan);flex-shrink:0;font-size:.9rem}
+        .c-txt p:first-child{font-size:.77rem;color:var(--muted);margin-bottom:.15rem}
+        .c-txt p:last-child{font-size:.92rem;font-weight:500}
+        .c-form{background:var(--bg3);border:1px solid var(--border);border-radius:16px;padding:2.5rem}
+        .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+        .form-g{margin-bottom:1.2rem}
+        .form-g label{display:block;font-size:.8rem;color:var(--muted);margin-bottom:.45rem;font-weight:500}
+        .form-g input,.form-g textarea,.form-g select{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:.72rem 1rem;color:var(--text);font-family:'Inter',sans-serif;font-size:.88rem;outline:none;transition:border-color .3s,box-shadow .3s}
+        .form-g input:focus,.form-g textarea:focus,.form-g select:focus{border-color:rgba(86,191,86,.45);box-shadow:0 0 0 3px rgba(86,191,86,.08)}
+        .form-g textarea{resize:vertical;min-height:115px}
+        .form-g select option{background:var(--bg2)}
+        .form-sub{width:100%;background:linear-gradient(135deg,var(--cyan),#2e9a2e);color:#050d1a;border:none;padding:1rem;border-radius:8px;font-weight:700;font-size:.92rem;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:.5rem;font-family:'Inter',sans-serif}
+        .form-sub:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(86,191,86,.38)}
+
+        /* ── FOOTER ── */
+        footer{background:#030810;border-top:1px solid var(--border);padding:3.5rem 2.5rem 2rem}
+        .footer-top{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
+        .f-brand p{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:1rem}
+        .f-brand p span{color:var(--cyan)}
+        .f-desc{font-size:.83rem;color:var(--muted);line-height:1.7;margin-bottom:1.5rem}
+        .f-social{display:flex;gap:.7rem}
+        .f-social a{width:35px;height:35px;border-radius:8px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);text-decoration:none;font-size:.82rem;transition:all .3s}
+        .f-social a:hover{background:var(--cyan-dim);border-color:rgba(86,191,86,.4);color:var(--cyan)}
+        .f-col h4{font-family:'Space Grotesk',sans-serif;font-size:.83rem;font-weight:600;margin-bottom:1.1rem;color:var(--text)}
+        .f-col ul{list-style:none;display:flex;flex-direction:column;gap:.55rem}
+        .f-col ul a{font-size:.82rem;color:var(--muted);text-decoration:none;transition:color .3s}
+        .f-col ul a:hover{color:var(--cyan)}
+        .footer-bot{max-width:1200px;margin:0 auto;padding-top:2rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;font-size:.78rem;color:var(--muted)}
+        .footer-bot .rut{font-family:'JetBrains Mono',monospace}
+
+        /* ── RESPONSIVE ── */
+        @media(max-width:900px){
+            .nav-links{display:none}.nav-toggle{display:block}
+            .nos-grid,.plat-grid,.contact-grid{grid-template-columns:1fr}
+            .srv-hdr{grid-template-columns:1fr}
+            .srv-grid{grid-template-columns:1fr 1fr}
+            .team-grid{grid-template-columns:1fr 1fr}
+            .footer-top{grid-template-columns:1fr 1fr}
+            section{padding:5rem 1.5rem}
+        }
+        @media(max-width:580px){
+            .srv-grid,.team-grid{grid-template-columns:1fr}
+            .form-row{grid-template-columns:1fr}
+            .hero-bottom{gap:2rem}
+            .footer-top{grid-template-columns:1fr}
+            .footer-bot{flex-direction:column;gap:.4rem;text-align:center}
+        }
+    </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════
+     NAVBAR
+════════════════════════════════════════ -->
+<nav id="navbar">
+    <a href="#hero" class="nav-logo">
+        <svg width="36" height="36" viewBox="0 0 40 40" fill="none">
+            <polygon points="20,2 36,11 36,29 20,38 4,29 4,11" fill="none" stroke="#56bf56" stroke-width="1.5"/>
+            <path d="M6,20 Q20,14 34,20" stroke="#56bf56" stroke-width=".8" fill="none" opacity=".45"/>
+            <path d="M20,4 Q24.5,20 20,36" stroke="#56bf56" stroke-width=".8" fill="none" opacity=".45"/>
+            <circle cx="20" cy="20" r="2.8" fill="#56bf56"/>
+        </svg>
+        <span class="logo-text">Geo<span>polis</span></span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+        <li><a href="#nosotros">Nosotros</a></li>
+        <li><a href="#servicios">Servicios</a></li>
+        <li><a href="#plataforma">Plataforma</a></li>
+        <li><a href="#equipo">Equipo</a></li>
+        <li><a href="#contacto" class="nav-cta">Contacto</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle"><i class="fas fa-bars"></i></button>
+</nav>
+
+<!-- ════════════════════════════════════════
+     HERO
+════════════════════════════════════════ -->
+<section id="hero">
+    <canvas id="heroCanvas"></canvas>
+    <div class="hero-radial"></div>
+    <div class="hero-content">
+        <div class="hero-badge">
+            <span class="badge-dot"></span>
+            Consultoría Geoespacial &nbsp;·&nbsp; Santiago, Chile
+        </div>
+        <h1 class="hero-title">
+            Transformamos datos<br>
+            <span class="gradient">en decisiones territoriales</span>
+        </h1>
+        <p class="hero-sub">
+            Somos un equipo de geógrafos especializados en SIG, estudios ambientales,
+            teledetección y desarrollo de plataformas geoespaciales web para apoyar
+            la gestión del territorio en Chile.
+        </p>
+        <div class="hero-ctas">
+            <a href="#servicios" class="btn-fill">
+                <i class="fas fa-layer-group"></i>Ver servicios
+            </a>
+            <a href="#plataforma" class="btn-ghost">
+                <i class="fas fa-globe"></i>Visualizador Geo
+            </a>
+        </div>
+        <div class="hero-bottom">
+            <div><div class="h-stat-num">3</div><div class="h-stat-lbl">Profesionales</div></div>
+            <div><div class="h-stat-num">6+</div><div class="h-stat-lbl">Especialidades</div></div>
+            <div><div class="h-stat-num">100%</div><div class="h-stat-lbl">Dedicación</div></div>
+        </div>
+    </div>
+    <div class="scroll-hint show">
+        <div class="scroll-line"></div>
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     NOSOTROS
+════════════════════════════════════════ -->
+<section id="nosotros">
+    <div class="container">
+        <div class="nos-grid">
+            <div class="reveal">
+                <div class="stag">Quiénes somos</div>
+                <h2 class="stitle">Geografía con<br><em>visión normativa</em></h2>
+                <p class="sdesc">
+                    Combinamos formación geográfica con conocimiento profundo de la normativa
+                    territorial chilena. Apoyamos a municipios, gobiernos regionales y privados
+                    en la formulación de instrumentos de planificación, gestión del riesgo y
+                    estudios ambientales exigidos por la legislación vigente, articulando SIG
+                    y tecnología en cada etapa del proceso.
+                </p>
+                <div class="nos-feats">
+                    <div class="nos-feat reveal d1">
+                        <div class="feat-ico"><i class="fas fa-gavel"></i></div>
+                        <div class="feat-txt">
+                            <h4>Dominio normativo</h4>
+                            <p>Conocimiento de la legislación en planificación territorial, cambio climático, gestión del riesgo y medio ambiente.</p>
+                        </div>
+                    </div>
+                    <div class="nos-feat reveal d2">
+                        <div class="feat-ico"><i class="fas fa-map-marked-alt"></i></div>
+                        <div class="feat-txt">
+                            <h4>SIG aplicado</h4>
+                            <p>Análisis geoespacial integrado al diagnóstico, diseño y formulación de instrumentos de planificación territorial.</p>
+                        </div>
+                    </div>
+                    <div class="nos-feat reveal d3">
+                        <div class="feat-ico"><i class="fas fa-users"></i></div>
+                        <div class="feat-txt">
+                            <h4>Consultoría integral</h4>
+                            <p>Equipo con expertise en geografía, análisis ambiental y plataformas digitales territoriales para una solución completa.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="stats-grid reveal d2">
+                <div class="stat-card">
+                    <div class="stat-num" data-target="20" data-suffix="+">0</div>
+                    <div class="stat-lbl">Años de experiencia<br>acumulada</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-num" data-target="6" data-suffix="">0</div>
+                    <div class="stat-lbl">Áreas de<br>especialización</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-num" data-target="6" data-suffix="+">0</div>
+                    <div class="stat-lbl">Regiones donde<br>hemos operado</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-num" data-target="100" data-suffix="%">0</div>
+                    <div class="stat-lbl">Comprometidos<br>con el territorio</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     SERVICIOS
+════════════════════════════════════════ -->
+<section id="servicios">
+    <div class="container">
+        <div class="srv-hdr">
+            <div class="reveal">
+                <div class="stag">Lo que hacemos</div>
+                <h2 class="stitle">Servicios<br><em>especializados</em></h2>
+            </div>
+            <p class="sdesc reveal d2">
+                Desde estudios de impacto ambiental hasta el desarrollo de plataformas
+                geoespaciales web. Abarcamos todo el ciclo del dato territorial.
+            </p>
+        </div>
+        <div class="srv-grid">
+
+            <!-- Formulación de Proyectos -->
+            <div class="srv-card c-cyan reveal">
+                <div class="srv-ico cyan"><i class="fas fa-file-contract"></i></div>
+                <h3>Formulación de Proyectos</h3>
+                <p>Formulación y evaluación de proyectos sociales y privados con enfoque territorial. Estudios de preinversión, diagnósticos y propuestas técnicas para postulación a financiamiento público y privado.</p>
+                <div class="tags">
+                    <span class="tag">FNDR</span><span class="tag">BIP</span><span class="tag">SNI</span><span class="tag">Municipios</span>
+                </div>
+            </div>
+
+            <!-- PACCC -->
+            <div class="srv-card c-green reveal d1">
+                <div class="srv-ico green"><i class="fas fa-temperature-half"></i></div>
+                <div class="law-ref green">Ley 21.455 · Marco de Cambio Climático</div>
+                <h3>PACCC</h3>
+                <p>Plan de Acción Climática Comunal. Diagnóstico de vulnerabilidades, identificación de sectores críticos y hoja de ruta comunal de mitigación y adaptación al cambio climático.</p>
+                <div class="tags">
+                    <span class="tag">Mitigación</span><span class="tag">Adaptación</span><span class="tag">Comunal</span>
+                </div>
+            </div>
+
+            <!-- PRRD -->
+            <div class="srv-card c-orange reveal d2">
+                <div class="srv-ico orange"><i class="fas fa-shield-halved"></i></div>
+                <div class="law-ref orange">Ley 21.364 · Sistema Nacional PRRD</div>
+                <h3>PRRD</h3>
+                <p>Plan de Reducción del Riesgo de Desastres. Identificación y zonificación de amenazas, análisis de vulnerabilidad territorial y definición de medidas de reducción del riesgo a escala comunal.</p>
+                <div class="tags">
+                    <span class="tag">Riesgo</span><span class="tag">Amenazas</span><span class="tag">SENAPRED</span>
+                </div>
+            </div>
+
+            <!-- PCE -->
+            <div class="srv-card c-red reveal d3">
+                <div class="srv-ico red"><i class="fas fa-triangle-exclamation"></i></div>
+                <div class="law-ref red">Ley 21.364 · SNPRD</div>
+                <h3>PCE</h3>
+                <p>Plan Comunal de Emergencias. Estructura organizacional, protocolos de respuesta, identificación de recursos y zonificación de áreas seguras para la gestión de emergencias comunales.</p>
+                <div class="tags">
+                    <span class="tag">Emergencias</span><span class="tag">Municipal</span><span class="tag">Protocolos</span>
+                </div>
+            </div>
+
+            <!-- Ordenamiento Territorial -->
+            <div class="srv-card c-purple reveal d4">
+                <div class="srv-ico purple"><i class="fas fa-city"></i></div>
+                <div class="law-ref purple">LGUC DFL-458 · Ley 21.450</div>
+                <h3>Ordenamiento Territorial</h3>
+                <p>Elaboración y actualización de Instrumentos de Planificación Territorial. Planes Reguladores Comunales, Seccionales y estudios de capacidad de acogida del territorio.</p>
+                <div class="tags">
+                    <span class="tag">PRC</span><span class="tag">IPT</span><span class="tag">PRDU</span><span class="tag">Planificación</span>
+                </div>
+            </div>
+
+            <!-- DIA / EIA -->
+            <div class="srv-card c-green reveal d5">
+                <div class="srv-ico green"><i class="fas fa-seedling"></i></div>
+                <div class="law-ref green">Ley 19.300 · Bases del Medio Ambiente</div>
+                <h3>DIA / EIA</h3>
+                <p>Declaraciones e Informes de Impacto Ambiental para ingreso al Sistema de Evaluación Ambiental (SEA). Diagnósticos territoriales y seguimiento de compromisos ambientales de proyectos.</p>
+                <div class="tags">
+                    <span class="tag">SEIA</span><span class="tag">SEA</span><span class="tag">Impacto Ambiental</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     PLATAFORMA / VISUALIZADOR
+════════════════════════════════════════ -->
+<section id="plataforma">
+    <div class="container">
+        <div class="plat-grid">
+            <div class="reveal">
+                <div class="stag">En desarrollo</div>
+                <div class="plat-badge">
+                    <i class="fas fa-circle" style="font-size:.45rem;animation:pulseDot 2s infinite"></i>
+                    Lanzamiento próximo
+                </div>
+                <h2 class="stitle">Visualizador<br><em>Geoespacial</em><br>Geopolis</h2>
+                <p class="sdesc">
+                    Nuestra plataforma web de visualización de datos geográficos está en desarrollo activo.
+                    Una herramienta para explorar, analizar y compartir datos territoriales de forma
+                    intuitiva, colaborativa y abierta.
+                </p>
+                <div class="plat-feats">
+                    <div class="plat-feat"><i class="fas fa-check-circle ok"></i><span>Capas vectoriales y raster en tiempo real</span></div>
+                    <div class="plat-feat"><i class="fas fa-check-circle ok"></i><span>Integración con datos abiertos del Estado de Chile</span></div>
+                    <div class="plat-feat"><i class="fas fa-check-circle ok"></i><span>Panel de análisis espacial interactivo</span></div>
+                    <div class="plat-feat"><i class="fas fa-check-circle ok"></i><span>Exportación de mapas y reportes automáticos</span></div>
+                    <div class="plat-feat"><i class="fas fa-clock soon"></i><span style="color:var(--muted)">Colaboración multiusuario (próximamente)</span></div>
+                </div>
+            </div>
+            <div class="reveal d2">
+                <div class="mockup-win">
+                    <div class="mockup-bar">
+                        <div class="m-dot r"></div>
+                        <div class="m-dot y"></div>
+                        <div class="m-dot g"></div>
+                        <div class="m-url">geo.geopolis.cl/visualizador</div>
+                    </div>
+                    <div class="mockup-body">
+                        <canvas id="mockupCanvas"></canvas>
+                        <div class="mockup-over">
+                            <div class="cs-box">
+                                <span class="cs-icon">🌍</span>
+                                <h3>En Desarrollo</h3>
+                                <p>Lanzamiento próximo · Geopolis 2026</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     EQUIPO
+════════════════════════════════════════ -->
+<section id="equipo">
+    <div class="container">
+        <div class="team-hdr reveal">
+            <div class="stag">El equipo</div>
+            <h2 class="stitle">Tres geógrafos,<br><em>un propósito</em></h2>
+            <p class="sdesc">
+                Tres geógrafos titulados de la Pontificia Universidad Católica de Chile, con posgrados
+                en planificación territorial, gestión del riesgo y SIG. Experiencia en MINVU, IDOM,
+                EULA-UdeC, Itrend, Huella Local y Fundación Superación de la Pobreza.
+            </p>
+        </div>
+        <div class="team-grid">
+            <div class="team-card reveal d1">
+                <div class="avatar av-j">JC</div>
+                <h3>José Córdova Fredes</h3>
+                <div class="team-role">Director · Geógrafo & Desarrollador Geoespacial</div>
+                <p class="team-desc">
+                    Doctor(c) en Planificación Territorial — Universitat de Barcelona. Máster UB · Geógrafo PUC (distinción).
+                    Especialista en SIG, plataformas geoespaciales web y formulación de proyectos de inversión pública.
+                    Experiencia en IDOM, EULA-UdeC, Huella Local y consultoría PACCC.
+                </p>
+                <div class="t-links">
+                    <a href="#" class="t-link"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" class="t-link"><i class="fas fa-envelope"></i></a>
+                    <a href="#" class="t-link"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+            <div class="team-card reveal d2">
+                <div class="avatar av-m">MG</div>
+                <h3>Matías Galarce Molina</h3>
+                <div class="team-role">Geógrafo · SIG & Territorio Comunitario</div>
+                <p class="team-desc">
+                    Geógrafo PUC (dos votos de distinción) · Diploma de Postítulo en SIG, U. de Chile.
+                    Especialista en diagnósticos socioterritoriales, SIG aplicado a vulnerabilidad y PRRD a escala barrial.
+                    Experiencia en MINVU (Quiero Mi Barrio) y Fundación Superación de la Pobreza.
+                </p>
+                <div class="t-links">
+                    <a href="#" class="t-link"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" class="t-link"><i class="fas fa-envelope"></i></a>
+                    <a href="#" class="t-link"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+            <div class="team-card reveal d3">
+                <div class="avatar av-c">CP</div>
+                <h3>Cristóbal Palma Torres</h3>
+                <div class="team-role">Geógrafo · Gestión del Riesgo & Resiliencia</div>
+                <p class="team-desc">
+                    Geógrafo PUC · Magíster(c) en Gestión y Arquitectura Resiliente para RRD, UdeC.
+                    Especialista en PRRD, PCE, análisis de riesgo y resiliencia territorial.
+                    Experiencia en Itrend, Un Techo para Chile e investigación CIGIDEN/FONDECYT.
+                </p>
+                <div class="t-links">
+                    <a href="#" class="t-link"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" class="t-link"><i class="fas fa-envelope"></i></a>
+                    <a href="#" class="t-link"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     CONTACTO
+════════════════════════════════════════ -->
+<section id="contacto">
+    <div class="container">
+        <div class="contact-grid">
+            <div class="reveal">
+                <div class="stag">Contáctanos</div>
+                <h2 class="stitle">¿Tienes un<br><em>proyecto territorial?</em></h2>
+                <p class="sdesc">
+                    Conversemos sobre cómo podemos apoyar tu proyecto con nuestras
+                    capacidades en geografía, ambiente y tecnología.
+                </p>
+                <div class="c-info">
+                    <div class="c-item">
+                        <div class="c-ico"><i class="fas fa-envelope"></i></div>
+                        <div class="c-txt">
+                            <p>Email</p>
+                            <p>contacto@geopolis.cl</p>
+                        </div>
+                    </div>
+                    <div class="c-item">
+                        <div class="c-ico"><i class="fas fa-globe-americas"></i></div>
+                        <div class="c-txt">
+                            <p>Cobertura</p>
+                            <p>Chile</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="c-form reveal d2">
+                <div class="form-row">
+                    <div class="form-g">
+                        <label>Nombre</label>
+                        <input type="text" placeholder="Tu nombre completo">
+                    </div>
+                    <div class="form-g">
+                        <label>Email</label>
+                        <input type="email" placeholder="tu@correo.cl">
+                    </div>
+                </div>
+                <div class="form-g">
+                    <label>Tipo de servicio</label>
+                    <select>
+                        <option value="">Selecciona un servicio...</option>
+                        <option>SIG & Cartografía Digital</option>
+                        <option>Estudio de Impacto Ambiental (DIA/EIA)</option>
+                        <option>Teledetección & Drones</option>
+                        <option>Planificación Territorial</option>
+                        <option>Plataforma Geoespacial Web</option>
+                        <option>Análisis y Modelamiento de Datos</option>
+                        <option>Otro / Consulta general</option>
+                    </select>
+                </div>
+                <div class="form-g">
+                    <label>Cuéntanos de tu proyecto</label>
+                    <textarea placeholder="Describe tu proyecto, área de estudio o necesidad..."></textarea>
+                </div>
+                <button class="form-sub">
+                    <i class="fas fa-paper-plane"></i>Enviar consulta
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════ -->
+<footer>
+    <div class="footer-top">
+        <div class="f-brand">
+            <p>Geo<span>polis</span> Consultores</p>
+            <p class="f-desc">
+                Consultoría geoespacial, estudios ambientales y tecnología
+                territorial para Chile y Latinoamérica.
+            </p>
+            <div class="f-social">
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+        <div class="f-col">
+            <h4>Servicios</h4>
+            <ul>
+                <li><a href="#servicios">SIG & Cartografía</a></li>
+                <li><a href="#servicios">Estudios DIA/EIA</a></li>
+                <li><a href="#servicios">Teledetección</a></li>
+                <li><a href="#servicios">Planificación</a></li>
+                <li><a href="#servicios">Plataformas Web</a></li>
+                <li><a href="#servicios">Análisis Espacial</a></li>
+            </ul>
+        </div>
+        <div class="f-col">
+            <h4>Empresa</h4>
+            <ul>
+                <li><a href="#nosotros">Quiénes somos</a></li>
+                <li><a href="#equipo">Equipo</a></li>
+                <li><a href="#plataforma">Visualizador</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+        </div>
+        <div class="f-col">
+            <h4>Contacto</h4>
+            <ul>
+                <li><a href="#">contacto@geopolis.cl</a></li>
+                <li><a href="#">Chile</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bot">
+        <span>© 2026 Geopolis Consultores · Todos los derechos reservados</span>
+        <span>Chile</span>
+    </div>
+</footer>
+
+<script>
+/* ── NAVBAR SCROLL ── */
+const nav = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+/* ── MOBILE MENU ── */
+const navToggle = document.getElementById('navToggle');
+const navLinks = document.getElementById('navLinks');
+let menuOpen = false;
+navToggle.addEventListener('click', () => {
+    menuOpen = !menuOpen;
+    if (menuOpen) {
+        Object.assign(navLinks.style, {
+            display:'flex', flexDirection:'column', position:'absolute',
+            top:'64px', left:'0', right:'0', background:'rgba(5,13,26,.97)',
+            padding:'1.5rem 2.5rem', backdropFilter:'blur(20px)',
+            borderBottom:'1px solid rgba(86,191,86,.12)'
+        });
+    } else {
+        navLinks.style.display = 'none';
+    }
+});
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+        e.preventDefault();
+        const t = document.querySelector(a.getAttribute('href'));
+        if (t) t.scrollIntoView({ behavior:'smooth' });
+        if (menuOpen) { menuOpen = false; navLinks.style.display = 'none'; }
+    });
+});
+
+/* ── HERO CANVAS ── */
+const hCanvas = document.getElementById('heroCanvas');
+const hCtx = hCanvas.getContext('2d');
+let particles = [];
+
+function resizeHero() {
+    hCanvas.width = window.innerWidth;
+    hCanvas.height = window.innerHeight;
+}
+resizeHero();
+window.addEventListener('resize', resizeHero);
+
+class Particle {
+    constructor() { this.init(); }
+    init() {
+        this.x = Math.random() * hCanvas.width;
+        this.y = Math.random() * hCanvas.height;
+        this.vx = (Math.random() - .5) * .35;
+        this.vy = (Math.random() - .5) * .35;
+        this.r = Math.random() * 2 + .8;
+        this.alpha = Math.random() * .45 + .15;
+        this.phase = Math.random() * Math.PI * 2;
+        this.pulsar = Math.random() < .12;
+    }
+    update() {
+        this.x += this.vx; this.y += this.vy; this.phase += .018;
+        if (this.x < 0 || this.x > hCanvas.width) this.vx *= -1;
+        if (this.y < 0 || this.y > hCanvas.height) this.vy *= -1;
+    }
+    draw() {
+        const a = this.pulsar ? Math.sin(this.phase) * .3 + .5 : this.alpha;
+        hCtx.beginPath();
+        hCtx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+        hCtx.fillStyle = `rgba(86,191,86,${a})`;
+        hCtx.fill();
+        if (this.pulsar) {
+            const ring = this.r + Math.sin(this.phase) * 7 + 4;
+            hCtx.beginPath();
+            hCtx.arc(this.x, this.y, ring, 0, Math.PI * 2);
+            hCtx.strokeStyle = `rgba(86,191,86,${Math.max(0, .28 - Math.sin(this.phase) * .25)})`;
+            hCtx.lineWidth = .6;
+            hCtx.stroke();
+        }
+    }
+}
+
+const COUNT = Math.min(90, Math.floor(window.innerWidth / 18));
+for (let i = 0; i < COUNT; i++) particles.push(new Particle());
+
+(function animHero() {
+    hCtx.clearRect(0, 0, hCanvas.width, hCanvas.height);
+    // subtle grid
+    hCtx.strokeStyle = 'rgba(86,191,86,.025)';
+    hCtx.lineWidth = 1;
+    for (let x = 0; x < hCanvas.width; x += 75) {
+        hCtx.beginPath(); hCtx.moveTo(x, 0); hCtx.lineTo(x, hCanvas.height); hCtx.stroke();
+    }
+    for (let y = 0; y < hCanvas.height; y += 75) {
+        hCtx.beginPath(); hCtx.moveTo(0, y); hCtx.lineTo(hCanvas.width, y); hCtx.stroke();
+    }
+    // connections
+    for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const d = Math.sqrt(dx*dx + dy*dy);
+            if (d < 145) {
+                hCtx.beginPath();
+                hCtx.moveTo(particles[i].x, particles[i].y);
+                hCtx.lineTo(particles[j].x, particles[j].y);
+                hCtx.strokeStyle = `rgba(86,191,86,${(1 - d/145) * .13})`;
+                hCtx.lineWidth = .5;
+                hCtx.stroke();
+            }
+        }
+    }
+    particles.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(animHero);
+})();
+
+/* ── MOCKUP CANVAS ── */
+const mCanvas = document.getElementById('mockupCanvas');
+const mCtx = mCanvas.getContext('2d');
+
+function drawMockup() {
+    mCanvas.width = mCanvas.offsetWidth;
+    mCanvas.height = mCanvas.offsetHeight;
+    const w = mCanvas.width, h = mCanvas.height;
+    mCtx.fillStyle = '#07101f';
+    mCtx.fillRect(0, 0, w, h);
+    // grid
+    mCtx.strokeStyle = 'rgba(86,191,86,.07)';
+    mCtx.lineWidth = .5;
+    for (let x = 0; x < w; x += 28) { mCtx.beginPath(); mCtx.moveTo(x,0); mCtx.lineTo(x,h); mCtx.stroke(); }
+    for (let y = 0; y < h; y += 28) { mCtx.beginPath(); mCtx.moveTo(0,y); mCtx.lineTo(w,y); mCtx.stroke(); }
+    // polygons
+    const polys = [
+        { pts:[[70,50],[170,42],[210,115],[140,155],[62,122]], fill:'rgba(86,191,86,.1)', stroke:'rgba(86,191,86,.4)' },
+        { pts:[[190,70],[310,52],[350,135],[265,172],[182,140]], fill:'rgba(124,58,237,.1)', stroke:'rgba(124,58,237,.4)' },
+        { pts:[[95,162],[210,152],[228,222],[152,250],[85,230]], fill:'rgba(0,245,147,.08)', stroke:'rgba(0,245,147,.35)' },
+    ];
+    polys.forEach(p => {
+        mCtx.beginPath();
+        mCtx.moveTo(p.pts[0][0], p.pts[0][1]);
+        p.pts.forEach(([x,y]) => mCtx.lineTo(x,y));
+        mCtx.closePath();
+        mCtx.fillStyle = p.fill; mCtx.fill();
+        mCtx.strokeStyle = p.stroke; mCtx.lineWidth = 1.5; mCtx.stroke();
+    });
+    // data points
+    [[122,90,'#56bf56'],[255,105,'#7c3aed'],[158,198,'#00f593'],
+     [78,72,'#56bf56'],[298,142,'#7c3aed'],[192,228,'#00f593'],
+     [175,125,'#56bf56'],[230,78,'#7c3aed']].forEach(([x,y,c]) => {
+        mCtx.beginPath(); mCtx.arc(x,y,3.5,0,Math.PI*2);
+        mCtx.fillStyle = c; mCtx.fill();
+        mCtx.beginPath(); mCtx.arc(x,y,7,0,Math.PI*2);
+        mCtx.strokeStyle = c.replace(')',',0.25)').replace('rgb','rgba');
+        mCtx.lineWidth = 1; mCtx.stroke();
+    });
+}
+setTimeout(drawMockup, 120);
+
+/* ── SCROLL REVEAL ── */
+const revealObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: .1 });
+document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+/* ── COUNTER ANIMATION ── */
+const counterObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+        if (!e.isIntersecting || e.target.dataset.done) return;
+        e.target.dataset.done = '1';
+        const target = +e.target.dataset.target;
+        const suffix = e.target.dataset.suffix || '';
+        const dur = 1400, step = target / (dur / 16);
+        let cur = 0;
+        const t = setInterval(() => {
+            cur = Math.min(cur + step, target);
+            e.target.textContent = Math.floor(cur) + suffix;
+            if (cur >= target) clearInterval(t);
+        }, 16);
+    });
+}, { threshold: .5 });
+document.querySelectorAll('[data-target]').forEach(el => counterObs.observe(el));
+</script>
+</body>
+</html>
