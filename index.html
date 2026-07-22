@@ -292,7 +292,7 @@
     <div class="hero-content">
         <div class="hero-badge">
             <span class="badge-dot"></span>
-            Consultoría Geoespacial &nbsp;·&nbsp; Santiago, Chile
+            Consultoría Territorial, Ambiental y de Riesgos
         </div>
         <h1 class="hero-title">
             Transformamos datos<br>
@@ -466,6 +466,16 @@
                 </div>
             </div>
 
+            <!-- Plataforma Geoespacial Web -->
+            <div class="srv-card c-cyan reveal d6">
+                <div class="srv-ico cyan"><i class="fas fa-map-location-dot"></i></div>
+                <h3>Plataforma Geoespacial Web</h3>
+                <p>Visor territorial open source para explorar, analizar y compartir capas geográficas en línea. Desarrollo a medida de plataformas SIG web para instituciones y proyectos.</p>
+                <div class="tags">
+                    <span class="tag">Open Source</span><span class="tag">WebGIS</span><span class="tag">Visor Territorial</span>
+                </div>
+            </div>
+
         </div>
     </div>
 </section>
@@ -538,7 +548,7 @@
             <div class="team-card reveal d1">
                 <div class="avatar av-j">JC</div>
                 <h3>José Córdova Fredes</h3>
-                <div class="team-role">Director · Geógrafo & Desarrollador Geoespacial</div>
+                <div class="team-role">Geógrafo · GeoDev & Planificación Territorial</div>
                 <p class="team-desc">
                     Doctor(c) en Planificación Territorial — Universitat de Barcelona. Máster UB · Geógrafo PUC.
                     Especialista en SIG, plataformas geoespaciales web y formulación de proyectos de inversión pública.
@@ -546,7 +556,7 @@
                 </p>
                 <div class="t-links">
                     <a href="https://www.linkedin.com/in/jcordovafredes/" class="t-link" target="_blank" rel="noopener"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#" class="t-link"><i class="fas fa-envelope"></i></a>
+                    <a href="mailto:jcordova@geopolis.cl" class="t-link"><i class="fas fa-envelope"></i></a>
                     <a href="#" class="t-link"><i class="fab fa-github"></i></a>
                 </div>
             </div>
@@ -561,8 +571,7 @@
                 </p>
                 <div class="t-links">
                     <a href="https://www.linkedin.com/in/mat%C3%ADas-galarce-molina-362108172/" class="t-link" target="_blank" rel="noopener"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#" class="t-link"><i class="fas fa-envelope"></i></a>
-                    <a href="#" class="t-link"><i class="fab fa-github"></i></a>
+                    <a href="mailto:mgalarce@geopolis.cl" class="t-link"><i class="fas fa-envelope"></i></a>
                 </div>
             </div>
             <div class="team-card reveal d3">
@@ -570,13 +579,13 @@
                 <h3>Cristóbal Palma Torres</h3>
                 <div class="team-role">Geógrafo · Gestión del Riesgo & Resiliencia</div>
                 <p class="team-desc">
-                    Geógrafo PUC. Especialista en PRRD, PCE, análisis de riesgo y resiliencia territorial.
+                    Geógrafo PUC. Diplomado(c) en Reducción del Riesgo de Desastre y Gestión de la Emergencia, UTFSM.
+                    Especialista en PRRD, PCE, análisis de riesgo y resiliencia territorial.
                     Experiencia en Itrend, Un Techo para Chile e investigación CIGIDEN/FONDECYT.
                 </p>
                 <div class="t-links">
                     <a href="https://www.linkedin.com/in/crist%C3%B3bal-palma-torres-70b17350/" class="t-link" target="_blank" rel="noopener"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#" class="t-link"><i class="fas fa-envelope"></i></a>
-                    <a href="#" class="t-link"><i class="fab fa-github"></i></a>
+                    <a href="mailto:cpalma@geopolis.cl" class="t-link"><i class="fas fa-envelope"></i></a>
                 </div>
             </div>
         </div>
@@ -601,7 +610,7 @@
                         <div class="c-ico"><i class="fas fa-envelope"></i></div>
                         <div class="c-txt">
                             <p>Email</p>
-                            <p>contacto@geopolis.cl</p>
+                            <p><a href="mailto:contacto@geopolis.cl" style="color:inherit;text-decoration:none">contacto@geopolis.cl</a></p>
                         </div>
                     </div>
                     <div class="c-item">
@@ -613,20 +622,22 @@
                     </div>
                 </div>
             </div>
-            <div class="c-form reveal d2">
+            <form id="contactForm" class="c-form reveal d2" action="https://formspree.io/f/mrenappg" method="POST">
+                <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+                <input type="hidden" name="_subject" value="Nueva consulta desde geopolis.cl">
                 <div class="form-row">
                     <div class="form-g">
                         <label>Nombre</label>
-                        <input type="text" placeholder="Tu nombre completo">
+                        <input type="text" name="name" placeholder="Tu nombre completo" required>
                     </div>
                     <div class="form-g">
                         <label>Email</label>
-                        <input type="email" placeholder="tu@correo.cl">
+                        <input type="email" name="email" placeholder="tu@correo.cl" required>
                     </div>
                 </div>
                 <div class="form-g">
                     <label>Tipo de servicio</label>
-                    <select>
+                    <select name="servicio">
                         <option value="">Selecciona un servicio...</option>
                         <option>SIG & Cartografía Digital</option>
                         <option>Estudio de Impacto Ambiental (DIA/EIA)</option>
@@ -639,12 +650,13 @@
                 </div>
                 <div class="form-g">
                     <label>Cuéntanos de tu proyecto</label>
-                    <textarea placeholder="Describe tu proyecto, área de estudio o necesidad..."></textarea>
+                    <textarea name="mensaje" placeholder="Describe tu proyecto, área de estudio o necesidad..." required></textarea>
                 </div>
-                <button class="form-sub">
-                    <i class="fas fa-paper-plane"></i>Enviar consulta
+                <button type="submit" class="form-sub">
+                    <i class="fas fa-paper-plane"></i><span>Enviar consulta</span>
                 </button>
-            </div>
+                <p id="formStatus" style="margin-top:.9rem;font-size:.85rem;text-align:center"></p>
+            </form>
         </div>
     </div>
 </section>
@@ -661,7 +673,7 @@
                 territorial para Chile y Latinoamérica.
             </p>
             <div class="f-social">
-                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                <a href="https://www.linkedin.com/company/geopolis-consultores" target="_blank" rel="noopener"><i class="fab fa-linkedin-in"></i></a>
                 <a href="#"><i class="fab fa-github"></i></a>
                 <a href="#"><i class="fab fa-instagram"></i></a>
                 <a href="#"><i class="fab fa-twitter"></i></a>
@@ -690,8 +702,8 @@
         <div class="f-col">
             <h4>Contacto</h4>
             <ul>
-                <li><a href="#">contacto@geopolis.cl</a></li>
-                <li><a href="#">Chile</a></li>
+                <li><a href="mailto:contacto@geopolis.cl">contacto@geopolis.cl</a></li>
+                <li>Chile</li>
             </ul>
         </div>
     </div>
@@ -770,7 +782,7 @@ class Particle {
         hCtx.fillStyle = `rgba(86,191,86,${a})`;
         hCtx.fill();
         if (this.pulsar) {
-            const ring = this.r + Math.sin(this.phase) * 7 + 4;
+            const ring = Math.max(0.1, this.r + Math.sin(this.phase) * 7 + 4);
             hCtx.beginPath();
             hCtx.arc(this.x, this.y, ring, 0, Math.PI * 2);
             hCtx.strokeStyle = `rgba(86,191,86,${Math.max(0, .28 - Math.sin(this.phase) * .25)})`;
@@ -879,6 +891,39 @@ const counterObs = new IntersectionObserver(entries => {
     });
 }, { threshold: .5 });
 document.querySelectorAll('[data-target]').forEach(el => counterObs.observe(el));
+
+/* ── FORMULARIO DE CONTACTO ── */
+const contactForm = document.getElementById('contactForm');
+const formStatus = document.getElementById('formStatus');
+contactForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = contactForm.querySelector('.form-sub');
+    const btnLabel = btn.querySelector('span');
+    btn.disabled = true;
+    btnLabel.textContent = 'Enviando...';
+    formStatus.textContent = '';
+    try {
+        const res = await fetch(contactForm.action, {
+            method: 'POST',
+            body: new FormData(contactForm),
+            headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+            contactForm.reset();
+            formStatus.style.color = 'var(--green)';
+            formStatus.textContent = '¡Gracias! Tu consulta fue enviada, te responderemos pronto.';
+        } else {
+            formStatus.style.color = '#ff4d6a';
+            formStatus.textContent = 'No pudimos enviar tu consulta. Intenta de nuevo o escríbenos a contacto@geopolis.cl.';
+        }
+    } catch (err) {
+        formStatus.style.color = '#ff4d6a';
+        formStatus.textContent = 'No pudimos enviar tu consulta. Intenta de nuevo o escríbenos a contacto@geopolis.cl.';
+    } finally {
+        btn.disabled = false;
+        btnLabel.textContent = 'Enviar consulta';
+    }
+});
 
 /* ── PROTECCIÓN BÁSICA DE CONTENIDO ── */
 document.addEventListener('contextmenu', e => e.preventDefault());
