@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Riesgo de Incendio</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+
+  <button id="toggleSidebar" title="Mostrar/ocultar panel">☰</button>
+
+  <div id="sidebar" class="active">
+
+    <div class="sidebar-header">
+      <div class="header-title">🔥 Riesgo de Incendio</div>
+      <div class="header-sub">Análisis forestal y urbano · Chile</div>
+      <div id="clientBadge" class="client-badge" style="display:none"></div>
+    </div>
+
+    <!-- Toggle de modo -->
+    <div class="mode-toggle">
+      <button class="mode-btn active" data-mode="forestal">🌲 Forestal</button>
+      <button class="mode-btn" data-mode="urbano">🏘️ Urbano</button>
+    </div>
+
+    <!-- Ubicación -->
+    <div class="section">
+      <label class="section-title">📍 Ubicación</label>
+      <select id="regSelect" class="admin-select">
+        <option value="">— Selecciona región —</option>
+      </select>
+      <select id="provSelect" class="admin-select" disabled>
+        <option value="">— Selecciona provincia —</option>
+      </select>
+      <select id="comunaSelect" class="admin-select" disabled>
+        <option value="">— Selecciona comuna —</option>
+      </select>
+    </div>
+
+    <!-- ══ PANEL FORESTAL ══ -->
+    <div id="forestalPanel">
+
+      <div class="section">
+        <label class="section-title">🌲 Cobertura vegetal</label>
+        <div id="vegStats" class="stats-list">
+          <div class="stat-empty">Selecciona una comuna para ver el análisis</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <label class="section-title">🚒 Cuarteles de bomberos</label>
+        <div id="stationStatsFor" class="stats-list">
+          <div class="stat-empty">Sin datos</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ══ PANEL URBANO ══ -->
+    <div id="urbanoPanel" style="display:none">
+
+      <div class="section">
+        <label class="section-title">💧 Hidrantes</label>
+        <div id="hydrantStats" class="stats-list">
+          <div class="stat-empty">Selecciona una comuna para ver el análisis</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <label class="section-title">🛣️ Accesibilidad de calles</label>
+        <div id="streetStats" class="stats-list">
+          <div class="stat-empty">Sin datos</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <label class="section-title">🚒 Cuarteles de bomberos</label>
+        <div id="stationStatsUrb" class="stats-list">
+          <div class="stat-empty">Sin datos</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="poiStatus" class="poi-status">Selecciona región, provincia y comuna para comenzar</div>
+
+  </div>
+
+  <div id="map"></div>
+
+  <div id="legend" style="display:none">
+    <!-- contenido dinámico según modo -->
+  </div>
+
+  <!-- Pantalla de acceso -->
+  <div id="lockScreen">
+    <div class="lock-box">
+      <div class="lock-icon">🔥</div>
+      <h2>Riesgo de Incendio</h2>
+      <p>Plataforma de acceso restringido.<br>Ingresa el código entregado por tu municipalidad.</p>
+      <input id="tokenInput" class="lock-input" type="text" placeholder="Código de acceso" autocomplete="off" />
+      <button id="tokenBtn" class="lock-btn">Acceder</button>
+      <div id="lockError" class="lock-error"></div>
+      <div class="lock-footer">¿No tienes acceso? <a href="mailto:contacto@geopolis.cl?subject=Solicitud%20de%20demo%20-%20Riesgo%20de%20Incendio">Solicitar demo</a></div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
