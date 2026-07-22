@@ -5,7 +5,7 @@
 // NOTA: esto es seguridad de demo (client-side). Para producción usar backend.
 
 const ACCESS_TOKENS = {
-  'demo': {
+  'demo01': {
     nombre: 'Modo Demo',
     comunas: [{ region: 'Arica y Parinacota', provincia: 'Arica', comuna: 'Arica' }]
   },
@@ -849,7 +849,7 @@ function validateAndStart(token) {
   loadAdminData(access);
 
   // El acceso público de demo expira a los 5 minutos
-  if (key === 'demo') {
+  if (key === 'demo01') {
     setTimeout(() => {
       const lockScreen = document.getElementById('lockScreen');
       lockScreen.querySelector('h2').textContent = 'Demo finalizada';
