@@ -842,8 +842,10 @@ function validateAndStart(token) {
   badge.textContent = access.nombre;
   badge.style.display = 'inline-block';
 
-  // Ocultar pantalla de bloqueo
-  document.getElementById('lockScreen').classList.add('hidden');
+  // Ocultar pantalla de bloqueo (limpiar el inline style que pudo quedar de la carga inicial)
+  const lockScreenEl = document.getElementById('lockScreen');
+  lockScreenEl.classList.add('hidden');
+  lockScreenEl.style.display = '';
 
   // Cargar datos con el filtro de acceso
   loadAdminData(access);
