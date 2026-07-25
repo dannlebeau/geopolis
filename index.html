@@ -24,6 +24,9 @@
 
     <link rel="icon" type="image/svg+xml" href="assests/logo-geopolis.svg">
 
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1842499606253396"
+     crossorigin="anonymous"></script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
@@ -300,6 +303,8 @@
         .f-col ul a:hover{color:var(--cyan)}
         .footer-bot{max-width:1200px;margin:0 auto;padding-top:2rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;font-size:.78rem;color:var(--muted)}
         .footer-bot .rut{font-family:'JetBrains Mono',monospace}
+        .footer-legal a{color:var(--muted);text-decoration:none;transition:color .3s}
+        .footer-legal a:hover{color:var(--cyan)}
 
         /* ── RESPONSIVE ── */
         @media(max-width:900px){
@@ -842,6 +847,7 @@
             <h4>Empresa</h4>
             <ul>
                 <li><a href="#nosotros">Quiénes somos</a></li>
+                <li><a href="acerca-de.html">Acerca de</a></li>
                 <li><a href="#equipo">Equipo</a></li>
                 <li><a href="#plataforma">Visualizador</a></li>
                 <li><a href="#cumplimiento">Cumplimiento</a></li>
@@ -858,7 +864,9 @@
     </div>
     <div class="footer-bot">
         <span>© 2026 Geopolis Consultores · Todos los derechos reservados</span>
-        <span>Chile</span>
+        <span class="footer-legal">
+            <a href="acerca-de.html">Acerca de</a> · <a href="privacidad.html">Política de Privacidad</a>
+        </span>
     </div>
 </footer>
 
