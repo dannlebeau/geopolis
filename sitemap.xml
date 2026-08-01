@@ -6,6 +6,16 @@
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://www.geopolis.cl/formulacion-proyectos.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.geopolis.cl/catastro-arbolado.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://www.geopolis.cl/visualizador/demo/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -13,7 +23,7 @@
   <url>
     <loc>https://www.geopolis.cl/acerca-de.html</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.geopolis.cl/privacidad.html</loc>
