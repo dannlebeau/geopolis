@@ -97,27 +97,19 @@ let urbanStationLayer = null;
 
 // ── MAP + PANES ──────────────────────────────────────────────────────────────
 
-const cartoLight = L.tileLayer(
-  'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-  { attribution: '© OpenStreetMap © CARTO', maxZoom: 19 }
-);
 const osmLayer = L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
   { attribution: '© OpenStreetMap contributors', maxZoom: 19 }
 );
 const satellite = L.tileLayer(
   'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
   { attribution: '© Esri', maxZoom: 18 }
 );
-const cartoDark = L.tileLayer(
-  'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-  { attribution: '© OpenStreetMap © CARTO', maxZoom: 19 }
-);
 
 const map = L.map('map', {
   center: [-35.5, -71.0],
   zoom: 6,
-  layers: [cartoLight]
+  layers: [osmLayer]
 });
 
 map.createPane('veg');      map.getPane('veg').style.zIndex      = 380;
@@ -127,10 +119,8 @@ map.createPane('hydrants'); map.getPane('hydrants').style.zIndex = 460;
 map.createPane('stations'); map.getPane('stations').style.zIndex = 490;
 
 L.control.layers({
-  '☀️ Mapa claro':    cartoLight,
   '🗺 OpenStreetMap': osmLayer,
-  '🛰 Satélite':      satellite,
-  '🌙 Mapa oscuro':   cartoDark
+  '🛰 Satélite':      satellite
 }, null, { position: 'topright', collapsed: true }).addTo(map);
 
 // ── ADMIN DATA ───────────────────────────────────────────────────────────────
